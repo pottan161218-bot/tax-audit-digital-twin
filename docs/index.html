@@ -1,0 +1,1359 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>税務調査のデジタルツイン | MASによる社会システム・シミュレーション</title>
+  <style>
+    :root {
+      --bg: #f6f7f4;
+      --paper: #ffffff;
+      --ink: #1f2933;
+      --muted: #65717d;
+      --line: #d9dfd4;
+      --accent: #236b5e;
+      --accent-2: #8b5e34;
+      --accent-3: #2f5f9a;
+      --soft: #e8f2ef;
+      --soft-2: #f4eadf;
+      --soft-3: #eaf0f8;
+      --warning: #fff5d8;
+      --radius: 8px;
+      --shadow: 0 12px 32px rgba(34, 45, 50, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, system-ui, sans-serif;
+      line-height: 1.8;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 56px 0 32px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 28px;
+      padding: 28px 0 64px;
+      align-items: start;
+    }
+
+    nav {
+      position: sticky;
+      top: 16px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    nav h2 {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+    }
+
+    nav a {
+      display: block;
+      padding: 7px 0;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      line-height: 1.4;
+      border-top: 1px solid #edf0ea;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin: 0 0 24px;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: 1.55rem;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 24px 0 10px;
+      font-size: 1.12rem;
+      line-height: 1.4;
+      letter-spacing: 0;
+    }
+
+    h4 {
+      margin: 18px 0 8px;
+      color: var(--accent-2);
+      font-size: 1rem;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .summary-item {
+      background: var(--soft);
+      border: 1px solid #cfe2dc;
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+
+    .summary-item strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--accent);
+    }
+
+    ul {
+      margin: 0 0 16px;
+      padding-left: 1.3rem;
+    }
+
+    li {
+      margin: 4px 0;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 14px 0 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+      background: #fff;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #e7ebe3;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background: #eef4f1;
+      color: #173f38;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .rules {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .rule {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #fbfcfa;
+    }
+
+    .rule h3 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .branches {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .branch {
+      border-left: 5px solid var(--accent-3);
+      background: var(--soft-3);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .branch h3 {
+      margin-top: 0;
+      color: var(--accent-3);
+    }
+
+    .flow {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .flow-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .flow-step {
+      position: relative;
+      min-height: 78px;
+      padding: 14px;
+      border: 1px solid #cfd9e7;
+      border-radius: var(--radius);
+      background: #f7faff;
+    }
+
+    .flow-step strong {
+      display: block;
+      color: var(--accent-3);
+      margin-bottom: 4px;
+    }
+
+    .flow-note {
+      margin-top: 12px;
+      padding: 12px;
+      background: var(--warning);
+      border: 1px solid #f0d98f;
+      border-radius: var(--radius);
+    }
+
+    .dialogue {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .line {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      background: #fff;
+    }
+
+    .line .speaker {
+      display: inline-block;
+      margin-bottom: 7px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .speaker.inspector { background: #415466; }
+    .speaker.president { background: #8b5e34; }
+    .speaker.okinawa { background: #1c7c74; }
+    .speaker.tax { background: #236b5e; }
+    .speaker.accounting { background: #6f5a9a; }
+    .speaker.bank { background: #2f5f9a; }
+
+    .line p {
+      margin: 0;
+    }
+
+    .note {
+      background: var(--soft-2);
+      border: 1px solid #e5d2bd;
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      color: #4d3a27;
+    }
+
+    .simulator {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1.08fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel,
+    .result-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfa;
+      padding: 18px;
+    }
+
+    .panel h3,
+    .result-panel h3 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .control {
+      display: grid;
+      gap: 7px;
+      padding: 12px 0;
+      border-top: 1px solid #e7ebe3;
+    }
+
+    .control:first-of-type {
+      border-top: 0;
+    }
+
+    .control-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 700;
+    }
+
+    .value-chip {
+      min-width: 3.5rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--accent);
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .checks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      font-weight: 700;
+    }
+
+    .check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+    }
+
+    .sim-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .metric {
+      padding: 12px;
+      border: 1px solid #dbe3d8;
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .metric strong {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .meter {
+      height: 9px;
+      margin-top: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e8ece5;
+    }
+
+    .meter span {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width 180ms ease;
+    }
+
+    .outcome {
+      margin: 0 0 16px;
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1px solid #cfd9e7;
+      background: var(--soft-3);
+    }
+
+    .outcome-label {
+      display: block;
+      margin-top: 3px;
+      color: var(--accent-3);
+      font-size: 1.45rem;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .agent-comments {
+      display: grid;
+      gap: 10px;
+      margin: 12px 0 18px;
+    }
+
+    .agent-comment {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .agent-comment strong {
+      display: inline-block;
+      margin-bottom: 4px;
+      color: var(--accent-2);
+    }
+
+    .actions-list {
+      margin-bottom: 0;
+    }
+
+    footer {
+      padding: 24px 0 48px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        position: static;
+      }
+
+      .summary-grid,
+      .rules,
+      .branches,
+      .flow-row,
+      .simulator,
+      .sim-summary {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        width: min(100% - 20px, 1120px);
+      }
+
+      .hero {
+        padding-top: 36px;
+      }
+
+      section {
+        padding: 20px;
+      }
+
+      table {
+        min-width: 640px;
+      }
+
+      .checks {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="page">
+      <p class="eyebrow">MASによる税務調査現場の社会システム・シミュレーション</p>
+      <h1>税務調査のデジタルツイン</h1>
+      <p class="subtitle">税務調査を、税務調査官・税理士・顧問先社長・経理担当者・銀行・心理的サポート役が相互作用する社会システムとして設計する説明資料。銀行は税務調査の場に直接同席するのではなく、調査結果や修正申告の可能性を受けて、会社の信用評価・資金繰りを確認する外部エージェントとして位置づける。</p>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <strong>論点</strong>
+          売上計上時期
+        </div>
+        <div class="summary-item">
+          <strong>方法</strong>
+          複数エージェントによるMAS
+        </div>
+        <div class="summary-item">
+          <strong>観察対象</strong>
+          資料、疑義、不安、信用、調整
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page layout">
+    <nav aria-label="目次">
+      <h2>目次</h2>
+      <a href="#theme">1. テーマ</a>
+      <a href="#purpose">2. 目的</a>
+      <a href="#agents">3. 登場エージェント</a>
+      <a href="#scenario">4. シミュレーション場面</a>
+      <a href="#timeline">5. 時系列データ</a>
+      <a href="#rules">6. 行動ルール</a>
+      <a href="#variables">7. 状態変数</a>
+      <a href="#simulator">操作パネル</a>
+      <a href="#changes">8. 変化ルール</a>
+      <a href="#branches">9. 分岐条件</a>
+      <a href="#outputs">10. 出力結果</a>
+      <a href="#flow">11. 流れ</a>
+      <a href="#dialogue">12. 会話例</a>
+      <a href="#observation">13. 観察される社会システム</a>
+      <a href="#value">14. 意義</a>
+      <a href="#summary">15. まとめ</a>
+    </nav>
+
+    <main>
+      <section id="theme">
+        <h2>1. テーマ</h2>
+        <p class="lead">本課題では、税務調査の現場を「社会システムのデジタルツイン」として設計する。</p>
+        <p>税務調査は、単に税法上の正誤だけで進むものではない。税務調査官、税理士、顧問先社長、経理担当者、銀行など、複数の関係者がそれぞれ異なる目的、不安、情報、利害を持って行動する。銀行は税務調査の場に直接同席するのではなく、調査結果や修正申告の可能性を受けて、会社の信用評価・資金繰りを確認する外部エージェントとして位置づける。</p>
+        <p>そのため、税務調査の現場は、複数のエージェントが相互作用する社会システムとして捉えることができる。</p>
+        <p>本シミュレーションでは、税務調査の場面をAI上に再現し、各エージェントがどのように発言し、判断し、衝突し、調整していくかを観察する。</p>
+      </section>
+
+      <section id="purpose">
+        <h2>2. 目的</h2>
+        <p>このデジタルツインの目的は、税務調査における次の要素を可視化することである。</p>
+        <ul>
+          <li>説明責任</li>
+          <li>情報の非対称性</li>
+          <li>感情的反応</li>
+          <li>信用不安</li>
+          <li>資料整備の重要性</li>
+          <li>税理士による調整機能</li>
+        </ul>
+        <p>税務調査では、同じ事実であっても、立場によって見え方が異なる。</p>
+        <ul>
+          <li>税務調査官は、申告内容に不自然な点がないかを確認する。</li>
+          <li>税理士は、法令に沿って顧問先を守りながら説明する。</li>
+          <li>顧問先社長は、追徴税額や銀行評価への影響を心配する。</li>
+          <li>経理担当者は、資料を探しながら事実関係を整理する。</li>
+          <li>銀行は、調査結果や修正申告の可能性を受けて、決算内容の修正や資金繰りへの影響を気にする。</li>
+          <li>心理的サポート役は、社長の不安を受け止め、場を落ち着かせる。</li>
+        </ul>
+        <p>このように、税務調査は「正しい答えを出すだけの場」ではなく、複数の関係者が不完全な情報の中で判断する社会的なプロセスである。</p>
+      </section>
+
+      <section id="agents">
+        <h2>3. 登場エージェント</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>エージェント</th>
+                <th>役割</th>
+                <th>目的</th>
+                <th>行動の特徴</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>税理士</td><td>顧問先を支援する専門家</td><td>顧問先を守りつつ、法令に沿って説明する</td><td>冷静、資料重視、説明の筋道を整える</td></tr>
+              <tr><td>顧問先社長</td><td>調査を受ける会社の代表</td><td>会社への悪影響を最小化したい</td><td>不安、感情的、銀行評価を気にする</td></tr>
+              <tr><td>税務調査官</td><td>申告内容を確認する行政側</td><td>申告の妥当性を確認する</td><td>厳格、矛盾点を質問する、証拠を求める</td></tr>
+              <tr><td>経理担当者</td><td>資料を管理する実務担当</td><td>必要資料を探して説明する</td><td>実務には詳しいが、一部不明点がある</td></tr>
+              <tr><td>銀行</td><td>会社の信用を見る外部エージェント</td><td>調査結果や修正申告の可能性を受けて、信用評価と資金繰りを確認する</td><td>税務調査には直接同席せず、数字、修正申告、資金繰りへの影響を重視する</td></tr>
+              <tr><td>心理的サポート役</td><td>社長の不安を受け止める存在</td><td>場の緊張をやわらげる</td><td>楽観的、受容的。ただし専門判断は税理士に委ねる</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="scenario">
+        <h2>4. シミュレーション場面</h2>
+        <p>今回の論点は「売上計上時期」とする。</p>
+        <p>税務調査官は、ある取引について、前期に売上計上すべきだったのではないかと疑問を持っている。一方、会社側は、納品と検収が完了したのは今期であるため、今期の売上として処理したと説明する。</p>
+        <p>この論点は、税務調査でよく問題になる。なぜなら、売上をどの年度に計上するかによって、法人税の金額が変わる可能性があるからである。</p>
+      </section>
+
+      <section id="timeline">
+        <h2>5. 前提となる時系列データ</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>項目</th><th>日付</th><th>説明</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>契約日</td><td>前期3月20日</td><td>契約は前期中に成立している</td></tr>
+              <tr><td>納品日</td><td>今期4月5日</td><td>商品またはサービスの提供が今期に行われた</td></tr>
+              <tr><td>検収日</td><td>今期4月10日</td><td>顧客による確認が今期に完了した</td></tr>
+              <tr><td>請求書発行日</td><td>今期4月30日</td><td>検収後に請求書を発行した</td></tr>
+              <tr><td>入金日</td><td>今期5月31日</td><td>請求後に入金された</td></tr>
+              <tr><td>メール履歴</td><td>一部不足</td><td>納品前後のやり取りに不足資料がある</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>この時系列により、契約日は前期であるものの、納品・検収・請求・入金はいずれも今期であることが分かる。</p>
+      </section>
+
+      <section id="rules">
+        <h2>6. 行動ルール</h2>
+        <p>各エージェントには、次のような行動ルールを設定する。</p>
+        <div class="rules">
+          <article class="rule">
+            <h3>6.1 税務調査官</h3>
+            <ul>
+              <li>請求書、納品書、契約書、入金記録を確認する。</li>
+              <li>売上計上時期に疑問があれば、具体的に質問する。</li>
+              <li>会社側の説明に矛盾があれば、追加資料を求める。</li>
+              <li>契約日だけでなく、納品日、検収日、請求日、入金日を総合的に確認する。</li>
+            </ul>
+          </article>
+          <article class="rule">
+            <h3>6.2 税理士</h3>
+            <ul>
+              <li>事実関係を整理して、法令と会計処理に沿って説明する。</li>
+              <li>顧問先社長が感情的になった場合、発言を整理する。</li>
+              <li>資料が不足している場合は、断定せず確認事項として扱う。</li>
+              <li>調査官の疑問点を整理し、会社側の説明資料を時系列でまとめる。</li>
+            </ul>
+          </article>
+          <article class="rule">
+            <h3>6.3 顧問先社長</h3>
+            <ul>
+              <li>追徴税額や銀行への影響を心配する。</li>
+              <li>調査官の質問に対して、防衛的または感情的に反応する。</li>
+              <li>税理士の助言を受けて、発言を修正する。</li>
+              <li>自社の信用低下を避けたいという意識を持つ。</li>
+            </ul>
+          </article>
+          <article class="rule">
+            <h3>6.4 経理担当者</h3>
+            <ul>
+              <li>必要な資料を探す。</li>
+              <li>実務上の処理理由を説明する。</li>
+              <li>不明点がある場合は、正直に「確認します」と答える。</li>
+              <li>契約書、納品書、検収書、請求書、通帳コピー、メール履歴を整理する。</li>
+            </ul>
+          </article>
+          <article class="rule">
+            <h3>6.5 銀行</h3>
+            <ul>
+              <li>税務調査の場に直接同席するのではなく、調査結果や修正申告の可能性を受けて確認する。</li>
+              <li>決算修正が融資判断に与える影響を確認する。</li>
+              <li>修正申告があった場合、資金繰りに問題がないかを見る。</li>
+              <li>会社の説明能力や管理体制も評価する。</li>
+              <li>税務調査の結果だけでなく、会社が冷静に対応できているかを確認する。</li>
+            </ul>
+          </article>
+          <article class="rule">
+            <h3>6.6 心理的サポート役</h3>
+            <ul>
+              <li>社長が不安になったときに、場を落ち着かせる。</li>
+              <li>社長の感情を受け止める。</li>
+              <li>ただし、税務判断や資料確認は税理士に委ねる。</li>
+              <li>楽観だけではなく、専門家による確認が必要であることを促す。</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="variables">
+        <h2>7. MASとしての状態変数</h2>
+        <p>本シミュレーションでは、各エージェントの行動を観察するため、次の状態変数を設定する。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>変数名</th><th>内容</th><th>初期値</th><th>高くなった場合の影響</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>資料整備度</td><td>契約書、納品書、検収書、請求書、入金記録、メール履歴が揃っている度合い</td><td>60</td><td>高いほど調査官の疑義が低下する</td></tr>
+              <tr><td>調査官の疑義度</td><td>売上計上時期に対する調査官の疑問の強さ</td><td>70</td><td>高いほど追加質問・追加資料要求が増える</td></tr>
+              <tr><td>社長の不安度</td><td>追徴税額、銀行評価、会社信用への不安</td><td>80</td><td>高いほど感情的発言が増える</td></tr>
+              <tr><td>税理士の説明整理度</td><td>税理士が資料と論点を整理できている度合い</td><td>50</td><td>高いほど場が安定し、調査官の疑義が低下する</td></tr>
+              <tr><td>経理担当者の資料把握度</td><td>経理担当者が資料の所在と内容を理解している度合い</td><td>60</td><td>高いほど説明の一貫性が増す</td></tr>
+              <tr><td>銀行の信用不安度</td><td>決算修正や資金繰りに対する銀行の不安</td><td>50</td><td>高いほど追加説明や資金繰り説明が必要になる</td></tr>
+              <tr><td>場の緊張度</td><td>調査現場全体の心理的圧力</td><td>75</td><td>高いほど不用意な発言や対立が起きやすい</td></tr>
+              <tr><td>追加資料必要度</td><td>調査官が追加資料を求める可能性</td><td>65</td><td>高いほど調査が長期化する</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="simulator">
+        <h2>シミュレーション操作パネル</h2>
+        <p>資料の有無や各エージェントの状態を変えると、状態変数、判定結果、エージェントコメント、対応策が変化する。税務判断を断定するものではなく、税務調査における相互作用を確認するための簡易教材である。</p>
+        <div class="simulator">
+          <div class="panel" aria-label="操作パネル">
+            <h3>条件を変更する</h3>
+            <div class="control">
+              <label class="control-label" for="input-docReadiness">資料整備度 <span class="value-chip" id="value-docReadiness">60</span></label>
+              <input id="input-docReadiness" type="range" min="0" max="100" value="60" data-var="docReadiness">
+            </div>
+            <div class="control">
+              <label class="control-label" for="input-suspicion">調査官の疑義度 <span class="value-chip" id="value-suspicion">70</span></label>
+              <input id="input-suspicion" type="range" min="0" max="100" value="70" data-var="suspicion">
+            </div>
+            <div class="control">
+              <label class="control-label" for="input-presidentAnxiety">社長の不安度 <span class="value-chip" id="value-presidentAnxiety">80</span></label>
+              <input id="input-presidentAnxiety" type="range" min="0" max="100" value="80" data-var="presidentAnxiety">
+            </div>
+            <div class="control">
+              <label class="control-label" for="input-taxAccountantClarity">税理士の説明整理度 <span class="value-chip" id="value-taxAccountantClarity">50</span></label>
+              <input id="input-taxAccountantClarity" type="range" min="0" max="100" value="50" data-var="taxAccountantClarity">
+            </div>
+            <div class="control">
+              <label class="control-label" for="input-accountingKnowledge">経理担当者の資料把握度 <span class="value-chip" id="value-accountingKnowledge">60</span></label>
+              <input id="input-accountingKnowledge" type="range" min="0" max="100" value="60" data-var="accountingKnowledge">
+            </div>
+            <div class="control">
+              <label class="control-label" for="input-bankConcern">銀行の信用不安度 <span class="value-chip" id="value-bankConcern">50</span></label>
+              <input id="input-bankConcern" type="range" min="0" max="100" value="50" data-var="bankConcern">
+            </div>
+            <div class="control">
+              <label class="control-label" for="input-tension">場の緊張度 <span class="value-chip" id="value-tension">75</span></label>
+              <input id="input-tension" type="range" min="0" max="100" value="75" data-var="tension">
+            </div>
+            <h3>資料の有無</h3>
+            <div class="checks">
+              <label class="check"><input type="checkbox" data-doc="contract" checked>契約書</label>
+              <label class="check"><input type="checkbox" data-doc="delivery" checked>納品書</label>
+              <label class="check"><input type="checkbox" data-doc="inspection" checked>検収書</label>
+              <label class="check"><input type="checkbox" data-doc="invoice" checked>請求書</label>
+              <label class="check"><input type="checkbox" data-doc="payment" checked>入金記録</label>
+              <label class="check"><input type="checkbox" data-doc="email">メール履歴</label>
+              <label class="check"><input type="checkbox" data-doc="worklog">作業記録</label>
+            </div>
+          </div>
+
+          <div class="result-panel" aria-live="polite">
+            <h3>現在の状態と判定</h3>
+            <div class="sim-summary" id="simMetrics"></div>
+            <div class="outcome">
+              <span>判定結果</span>
+              <span class="outcome-label" id="outcomeLabel">追加資料提出</span>
+              <p id="outcomeReason">不足資料と疑義度をもとに、追加確認が必要な状態です。</p>
+            </div>
+            <h3>エージェント別コメント</h3>
+            <div class="agent-comments" id="agentComments"></div>
+            <h3>次に取るべき対応策</h3>
+            <ul class="actions-list" id="actionsList"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="changes">
+        <h2>8. 状態変数の変化ルール</h2>
+        <p>各イベントにより、状態変数は次のように変化する。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>イベント</th><th>変化する変数</th><th>変化内容</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>契約日が前期であることが判明</td><td>調査官の疑義度</td><td>上昇</td></tr>
+              <tr><td>納品日・検収日が今期であることを資料で示す</td><td>調査官の疑義度</td><td>低下</td></tr>
+              <tr><td>メール履歴が一部不足している</td><td>追加資料必要度</td><td>上昇</td></tr>
+              <tr><td>社長が感情的に発言する</td><td>場の緊張度、調査官の疑義度</td><td>上昇</td></tr>
+              <tr><td>税理士が発言を整理する</td><td>場の緊張度</td><td>低下</td></tr>
+              <tr><td>経理担当者が資料を即時提示する</td><td>資料整備度、経理担当者の資料把握度</td><td>上昇</td></tr>
+              <tr><td>銀行が修正申告リスクを懸念する</td><td>銀行の信用不安度</td><td>上昇</td></tr>
+              <tr><td>税理士が影響額を試算する</td><td>銀行の信用不安度</td><td>低下</td></tr>
+              <tr><td>心理的サポート役が社長を落ち着かせる</td><td>社長の不安度、場の緊張度</td><td>低下</td></tr>
+              <tr><td>追加資料を一覧化して提出する</td><td>資料整備度、税理士の説明整理度</td><td>上昇</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="branches">
+        <h2>9. 分岐条件</h2>
+        <p>本シミュレーションでは、資料の整備状況、説明の一貫性、社長の発言、銀行の反応によって結果が分岐する。</p>
+        <div class="branches">
+          <article class="branch">
+            <h3>9.1 分岐A：資料が十分に揃っている場合</h3>
+            <h4>条件</h4>
+            <ul>
+              <li>資料整備度が高い。</li>
+              <li>納品日、検収日、請求日、入金日の流れが明確である。</li>
+              <li>税理士が時系列で説明できている。</li>
+              <li>社長が不用意な発言をしない。</li>
+            </ul>
+            <h4>結果</h4>
+            <ul>
+              <li>調査官の疑義度が低下する。</li>
+              <li>追加資料要求は最小限にとどまる。</li>
+              <li>売上計上時期について、会社側処理の合理性が認められる可能性が高まる。</li>
+              <li>銀行の信用不安度も低下する。</li>
+            </ul>
+          </article>
+          <article class="branch">
+            <h3>9.2 分岐B：資料の一部が不足している場合</h3>
+            <h4>条件</h4>
+            <ul>
+              <li>契約書、納品書、検収書はあるが、メール履歴や作業記録が一部不足している。</li>
+              <li>経理担当者が一部資料の所在を確認できていない。</li>
+              <li>調査官が実質的な提供完了時期を確認したいと考えている。</li>
+            </ul>
+            <h4>結果</h4>
+            <ul>
+              <li>追加資料必要度が上昇する。</li>
+              <li>調査官は追加資料の提出を求める。</li>
+              <li>調査は継続確認となる。</li>
+              <li>税理士は資料提出一覧表を作成し、後日説明する必要がある。</li>
+            </ul>
+          </article>
+          <article class="branch">
+            <h3>9.3 分岐C：社長が感情的に発言した場合</h3>
+            <h4>条件</h4>
+            <ul>
+              <li>社長の不安度が高い。</li>
+              <li>調査官の質問を「疑われている」と受け止める。</li>
+              <li>税理士の整理を待たずに発言する。</li>
+            </ul>
+            <h4>結果</h4>
+            <ul>
+              <li>場の緊張度が上昇する。</li>
+              <li>調査官の疑義度が上昇する可能性がある。</li>
+              <li>税理士が発言を整理し直す必要がある。</li>
+              <li>心理的サポート役の介入により、社長の不安を下げる必要がある。</li>
+            </ul>
+          </article>
+          <article class="branch">
+            <h3>9.4 分岐D：銀行が信用不安を強めた場合</h3>
+            <h4>条件</h4>
+            <ul>
+              <li>修正申告の可能性があると銀行が認識する。</li>
+              <li>追徴税額や資金繰りへの影響が不明である。</li>
+              <li>会社が説明資料を整理できていない。</li>
+            </ul>
+            <h4>結果</h4>
+            <ul>
+              <li>銀行の信用不安度が上昇する。</li>
+              <li>融資継続、返済条件、追加資料提出に影響する可能性がある。</li>
+              <li>税理士は、税務調査の結果だけでなく、資金繰りへの影響額も試算する必要がある。</li>
+            </ul>
+          </article>
+          <article class="branch">
+            <h3>9.5 分岐E：税理士が適切に調整した場合</h3>
+            <h4>条件</h4>
+            <ul>
+              <li>税理士が調査官の疑問点を正確に把握する。</li>
+              <li>社長の感情的発言を整理する。</li>
+              <li>経理担当者から資料を集め、時系列表にまとめる。</li>
+              <li>銀行に対しても、影響額と対応方針を説明する。</li>
+            </ul>
+            <h4>結果</h4>
+            <ul>
+              <li>場の緊張度が低下する。</li>
+              <li>調査官の疑義度が低下する。</li>
+              <li>銀行の信用不安度が低下する。</li>
+              <li>税務調査が「対立」ではなく「確認」の場として進行する。</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="outputs">
+        <h2>10. 出力結果</h2>
+        <p>本シミュレーションでは、最終的に次のような出力結果が想定される。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>出力結果</th><th>内容</th><th>発生条件</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>指摘なし</td><td>会社側の売上計上時期に合理性があると判断される</td><td>資料整備度が高く、説明が一貫している</td></tr>
+              <tr><td>追加資料提出</td><td>メール履歴や検収資料などの追加確認が必要となる</td><td>一部資料が不足している</td></tr>
+              <tr><td>継続確認</td><td>調査官が実質的な提供完了時期をさらに確認する</td><td>疑義度が一定以上残る</td></tr>
+              <tr><td>修正申告リスクあり</td><td>前期売上と判断される可能性がある</td><td>納品・検収前に実質的な提供完了が認められる</td></tr>
+              <tr><td>銀行説明必要</td><td>決算修正や資金繰りへの影響を銀行に説明する必要がある</td><td>銀行の信用不安度が高い</td></tr>
+              <tr><td>社内管理改善必要</td><td>資料管理や証憑保存体制の改善が必要となる</td><td>資料整備度、資料把握度が低い</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="flow">
+        <h2>11. シミュレーションの流れ</h2>
+        <div class="flow">
+          <div class="flow-row">
+            <div class="flow-step"><strong>開始</strong>税務調査開始</div>
+            <div class="flow-step"><strong>質問</strong>売上計上時期について質問</div>
+            <div class="flow-step"><strong>確認</strong>契約書・納品書・検収書・請求書を確認</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-step"><strong>資料が十分</strong>税理士が時系列で説明し、説明が一貫していれば調査官の疑義度が低下する。</div>
+            <div class="flow-step"><strong>資料不足あり</strong>追加資料提出を求められ、メール履歴・作業記録を確認する。</div>
+            <div class="flow-step"><strong>社長の発言</strong>感情的に発言した場合、場の緊張度が上昇し、税理士が発言を整理する。</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-step"><strong>指摘なし又は軽微な確認</strong>処理の合理性を説明できれば調査終了へ進む。</div>
+            <div class="flow-step"><strong>修正申告リスクあり</strong>実質的な提供完了時期が不明確な場合、銀行への影響説明が必要になる。</div>
+            <div class="flow-step"><strong>調査終了</strong>指摘なし、継続確認後の説明、銀行への影響説明などを経て終了する。</div>
+          </div>
+        </div>
+        <p class="flow-note">税務調査の進行を、資料確認・追加確認・説明対応・調査終了までの流れとして整理している。</p>
+      </section>
+
+      <section id="dialogue">
+        <h2>12. シミュレーション例</h2>
+        <h3>場面</h3>
+        <p>税務調査官が、売上計上時期について質問している。会社側は、契約書、納品書、検収書、請求書を確認しながら説明する。</p>
+        <h3>会話例</h3>
+        <div class="dialogue">
+          <div class="line">
+            <span class="speaker inspector">税務調査官</span>
+            <p>「この取引ですが、契約日は前期になっています。なぜ売上が今期に計上されているのでしょうか。前期に売上を計上すべきだった可能性はありませんか。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker president">顧問先社長</span>
+            <p>「え、ちょっと待ってください。前期の売上になる言われたら、銀行さんへの説明までダンジョンみたいに迷ってしまいますやん。うち、そんな隠すつもりなんて全然ないんですけど。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker okinawa">沖縄の相談役</span>
+            <p>「社長さん、まずは深呼吸さー。なんくるないさー。けど、なんくるないさーだけでは税務署さんも銀行さんも納得せんから、資料はちゃんと出すさー。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker tax">税理士</span>
+            <p>「その通りです。社長、ここはモンスターエナジー飲んで勢いで突破する場面やありません。契約日だけで判断するのではなく、納品日、検収日、請求日、入金日を時系列で確認する必要があります。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker accounting">経理担当者</span>
+            <p>「契約書は前期の日付です。ただ、納品は今期の4月5日で、検収書も4月10日になっています。請求書は4月末発行です。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker inspector">税務調査官</span>
+            <p>「では、前期中には商品やサービスの提供は完了していなかった、という理解でよいですか。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker tax">税理士</span>
+            <p>「はい。現時点の資料では、収益を認識できる状態になったのは今期と考えています。契約日だけで売上計上したのではなく、納品と検収の完了をもって売上計上した、という整理です。ただし、追加資料で確認できる部分は確認します。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker president">顧問先社長</span>
+            <p>「つまり、前期に売上を隠したわけやない、ということですね。そこだけは、ほんまに分かってほしいんです。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker tax">税理士</span>
+            <p>「その通りです。ただし、『隠してません』だけでは弱いです。説明には資料が必要です。契約書、納品書、検収書、請求書、入金記録をそろえて、時系列で説明しましょう。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker inspector">税務調査官</span>
+            <p>「入金はいつですか。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker accounting">経理担当者</span>
+            <p>「入金は5月末です。通帳コピーもあります。ただ、当初のメールのやり取りは一部探しているところです。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker inspector">税務調査官</span>
+            <p>「メールが一部ない点は確認事項ですね。納品前に実質的にサービス提供が完了していた可能性がないか、追加で確認します。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker president">顧問先社長</span>
+            <p>「またダンジョンの奥に進む感じですやん。出口あるんですか、これ。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker okinawa">沖縄の相談役</span>
+            <p>「出口はあるさー。ただし、松明の代わりに必要なのは、契約書と納品書と検収書さー。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker tax">税理士</span>
+            <p>「そういうことです。焦って余計なことを言うと、道が分岐します。承知しました。追加資料を整理し、取引の流れを一覧表にして提出します。」</p>
+          </div>
+          <p class="note">以下は税務調査への同席ではなく、調査結果や修正申告の可能性を受けた後日の銀行説明の場面である。</p>
+          <div class="line">
+            <span class="speaker bank">銀行</span>
+            <p>「当行としては、仮に修正申告となる場合、資金繰りへの影響を確認したいです。現時点で影響額の試算は可能でしょうか。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker tax">税理士</span>
+            <p>「現時点では、会社側の処理には合理性があると考えています。ただし、念のため影響額を試算し、調査結果に応じて説明できるよう準備します。税務署さんにも銀行さんにも、感情ではなく資料と数字で説明します。」</p>
+          </div>
+          <div class="line">
+            <span class="speaker okinawa">沖縄の相談役</span>
+            <p>「なんくるないさー。ただし、なんくるないさーを成立させるには、ちゃんと準備することさー。」</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="observation">
+        <h2>13. 観察される社会システム</h2>
+        <p>このシミュレーションから分かることは、税務調査が単なる「税務署対会社」の関係ではないということである。</p>
+        <p>税務調査官の質問は、会社の会計処理だけでなく、社長の心理、経理担当者の資料管理、税理士の説明能力、銀行の信用判断にも影響する。</p>
+        <p>特に重要なのは、情報の非対称性である。</p>
+        <p>税務調査官は、会社内部の事情を完全には知らない。会社側も、調査官がどこを疑問に思っているのかを完全には把握できない。そのため、資料と説明によって、相互の認識を近づける必要がある。</p>
+        <p>また、顧問先社長の不安も重要である。社長が感情的になると、事実関係とは別の発言をしてしまい、調査が複雑化する可能性がある。そこで税理士は、専門知識だけでなく、場を落ち着かせる調整役としても機能する。</p>
+        <p>心理的サポート役は、法令や会計処理の専門家ではない。しかし、社長の不安を受け止め、場の緊張をやわらげる役割を持つ。このエージェントを加えることで、税務調査では論理的な説明だけでなく、心理的な安定も重要であることが分かる。</p>
+        <p>一方で、心理的な安定だけでは、税務調査官への説明や、調査結果を受けた銀行への説明は成り立たない。最終的には、安心感と資料整理の両方が必要になる。</p>
+      </section>
+
+      <section id="value">
+        <h2>14. このデジタルツインの意義</h2>
+        <p>この税務調査デジタルツインには、次のような意義がある。</p>
+        <ul>
+          <li>税務調査の流れを事前に体験できる。</li>
+          <li>税理士、社長、経理担当者の役割分担を学べる。</li>
+          <li>説明に必要な資料を確認できる。</li>
+          <li>感情的な反応が調査に与える影響を理解できる。</li>
+          <li>銀行など外部関係者への説明も含めて考えられる。</li>
+          <li>資料整備度、疑義度、不安度などの変数を通じて、調査現場の変化を観察できる。</li>
+          <li>分岐条件を設定することで、資料不足や感情的発言が結果に与える影響を比較できる。</li>
+        </ul>
+        <p>つまり、このシミュレーションは、税務知識を暗記するためのものではなく、税務調査という社会システムを動的に理解するための学習装置である。</p>
+      </section>
+
+      <section id="summary">
+        <h2>15. まとめ</h2>
+        <p>税務調査は、税法、会計、経営、金融、心理が絡み合う複雑な社会システムである。</p>
+        <p>本課題では、税務調査の現場をデジタルツインとして再現し、税理士、顧問先社長、税務調査官、経理担当者、銀行、心理的サポート役をエージェントとして設計した。銀行は調査に直接同席するのではなく、調査結果や修正申告の可能性を受けて信用評価・資金繰りを確認する外部エージェントとして扱う。各エージェントは、それぞれ異なる目的と不安を持ち、資料や発言を通じて相互作用する。</p>
+        <p>さらに、MASとしての状態変数、分岐条件、出力結果を設定することで、税務調査を単なる会話例ではなく、動的な社会システムとして観察できるようにした。</p>
+        <p>このモデルにより、税務調査の難しさは「税法の答えが分からないこと」だけではなく、「複数の関係者が異なる視点で同じ事実を見ること」にあると分かる。</p>
+        <p>資料を整理し、時系列を確認し、各エージェントの立場を理解すれば、複雑な税務調査であっても、対応方針を見出すことができる。税務調査のデジタルツインは、その対応方針を探すための実践的なシミュレーションである。</p>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <div class="page">
+      税務調査のデジタルツイン | MASによる税務調査現場の社会システム・シミュレーション
+    </div>
+  </footer>
+  <script>
+    (() => {
+      const clamp = (value) => Math.max(0, Math.min(100, Math.round(value)));
+
+      const variableLabels = {
+        docReadiness: "資料整備度",
+        suspicion: "調査官の疑義度",
+        presidentAnxiety: "社長の不安度",
+        taxAccountantClarity: "税理士の説明整理度",
+        accountingKnowledge: "経理担当者の資料把握度",
+        bankConcern: "銀行の信用不安度",
+        tension: "場の緊張度",
+        additionalDocs: "追加資料必要度",
+        bankExplanation: "銀行説明必要性"
+      };
+
+      const resultPriority = [
+        "修正申告リスクあり",
+        "銀行説明必要",
+        "追加資料提出",
+        "継続確認",
+        "社内管理改善必要",
+        "指摘なし"
+      ];
+
+      const comments = {
+        "指摘なし": {
+          inspector: "資料と説明に一貫性があるため、現時点では大きな指摘にはつながりにくいと考えます。",
+          tax: "契約日、納品日、検収日、請求日、入金日を時系列で説明できています。",
+          president: "資料で説明できるなら、少し安心できます。",
+          accounting: "証憑を整理した状態で提示できます。",
+          bank: "調査結果と資金繰りへの影響を確認したうえで、信用評価を見ます。",
+          support: "落ち着いて説明できているさー。準備があると安心につながるさー。"
+        },
+        "追加資料提出": {
+          inspector: "メール履歴と作業記録を追加で確認します。",
+          tax: "契約日、納品日、検収日、請求日、入金日を一覧表にして提出します。",
+          president: "銀行への影響が心配です。",
+          accounting: "不足資料を確認します。",
+          bank: "修正申告の可能性と資金繰りへの影響を確認したいです。",
+          support: "まずは落ち着いて、資料を順番に確認しましょう。"
+        },
+        "継続確認": {
+          inspector: "実質的な提供完了時期について、もう少し確認します。",
+          tax: "断定せず、追加確認事項として整理します。",
+          president: "まだ終わらないのは不安ですが、説明の準備を進めます。",
+          accounting: "メール履歴、作業記録、検収資料を再確認します。",
+          bank: "調査が継続する場合、結果が出た時点で影響を確認します。",
+          support: "長引くと焦るさー。でも、順番に確認すれば出口は見えるさー。"
+        },
+        "修正申告リスクあり": {
+          inspector: "前期に実質的な提供が完了していた可能性を確認する必要があります。",
+          tax: "修正申告リスクありとして、事実関係と影響額を慎重に整理します。",
+          president: "修正申告になる可能性があるなら、資金繰りが心配です。",
+          accounting: "不足している証憑と処理根拠を急いで確認します。",
+          bank: "修正申告の可能性がある場合、返済能力や資金繰りへの影響を確認します。",
+          support: "焦って言い切らず、専門家と資料を確認することが大切さー。"
+        },
+        "銀行説明必要": {
+          inspector: "税務上の確認は資料に基づいて進めます。",
+          tax: "調査結果だけでなく、銀行向けに影響額と対応方針を説明できるようにします。",
+          president: "銀行にどう見られるかが一番心配です。",
+          accounting: "資金繰り資料と決算への影響を整理します。",
+          bank: "調査結果や修正申告の可能性を受けて、信用評価と資金繰りを確認します。",
+          support: "銀行さんには、感情より数字と対応方針で伝えるさー。"
+        },
+        "社内管理改善必要": {
+          inspector: "資料管理体制についても確認が必要です。",
+          tax: "証憑保存ルールと資料の所在管理を見直す必要があります。",
+          president: "調査対応だけでなく、普段の管理も課題ですね。",
+          accounting: "資料の保存場所と確認手順を整理します。",
+          bank: "管理体制が改善されるかも、信用評価の材料になります。",
+          support: "次から迷わないように、資料の置き場所を決めるさー。"
+        }
+      };
+
+      const actions = {
+        "指摘なし": [
+          "時系列表を保存し、説明根拠を残す",
+          "契約書、納品書、検収書、請求書、入金記録を整理して保管する",
+          "調査官からの追加質問に備えて、説明文を簡潔にまとめる"
+        ],
+        "追加資料提出": [
+          "時系列表を作成する",
+          "契約書、納品書、検収書、請求書、入金記録を整理する",
+          "メール履歴、作業記録を追加確認する",
+          "税務調査官への説明文を作成する"
+        ],
+        "継続確認": [
+          "実質的な提供完了時期を追加確認する",
+          "メール履歴、作業記録、検収資料を整理する",
+          "未確認事項を一覧化し、後日回答できる形にする"
+        ],
+        "修正申告リスクあり": [
+          "修正申告リスクありとして影響額を試算する",
+          "納品・検収前に実質的な提供完了があったか確認する",
+          "税務調査官への説明文を作成する",
+          "銀行向けに影響額を試算する"
+        ],
+        "銀行説明必要": [
+          "銀行向けに影響額を試算する",
+          "資金繰りへの影響を整理する",
+          "調査結果や修正申告の可能性を受けた説明資料を作成する"
+        ],
+        "社内管理改善必要": [
+          "社内の証憑保存ルールを見直す",
+          "資料の保存場所と担当者を明確にする",
+          "契約書、納品書、検収書、請求書、入金記録の確認手順を整備する"
+        ]
+      };
+
+      const reasonText = {
+        "指摘なし": "資料整備度が高く、疑義度が低く、税理士の説明整理度も高いため、会社側処理の合理性を説明しやすい状態です。",
+        "追加資料提出": "資料整備度が低い、または追加資料必要度が高いため、メール履歴や作業記録などの追加確認が必要です。",
+        "継続確認": "調査官の疑義度が高いため、実質的な提供完了時期について継続確認が必要です。",
+        "修正申告リスクあり": "調査官の疑義度が高く、資料整備度が低いため、修正申告リスクありとして慎重に確認する必要があります。",
+        "銀行説明必要": "銀行の信用不安度または銀行説明必要性が高いため、調査結果や修正申告の可能性を受けた説明が必要です。",
+        "社内管理改善必要": "経理担当者の資料把握度が低いため、証憑保存体制や資料管理ルールの見直しが必要です。"
+      };
+
+      function baseInputs() {
+        const values = {};
+        document.querySelectorAll("[data-var]").forEach((input) => {
+          values[input.dataset.var] = Number(input.value);
+          const output = document.getElementById(`value-${input.dataset.var}`);
+          if (output) output.textContent = input.value;
+        });
+        return values;
+      }
+
+      function documentState() {
+        const docs = {};
+        document.querySelectorAll("[data-doc]").forEach((input) => {
+          docs[input.dataset.doc] = input.checked;
+        });
+        return docs;
+      }
+
+      function calculateState() {
+        const values = baseInputs();
+        const docs = documentState();
+
+        const coreDocs = ["inspection", "delivery", "invoice", "payment"];
+        const coreDocsReady = coreDocs.every((key) => docs[key]);
+        const requiredDocs = ["contract", "delivery", "inspection", "invoice", "payment", "email", "worklog"];
+        const missingCount = requiredDocs.filter((key) => !docs[key]).length;
+
+        let docReadiness = values.docReadiness;
+        if (coreDocsReady) docReadiness += 18;
+        docReadiness += values.accountingKnowledge >= 70 ? 10 : 0;
+        docReadiness -= missingCount * 8;
+
+        let additionalDocs = 35 + missingCount * 9;
+        if (!docs.email || !docs.worklog) additionalDocs += 20;
+
+        let tension = values.tension;
+        if (values.presidentAnxiety >= 70) tension += 15;
+        if (values.taxAccountantClarity >= 70) tension -= 18;
+
+        let suspicion = values.suspicion;
+        if (coreDocsReady) suspicion -= 16;
+        if (values.taxAccountantClarity >= 70) suspicion -= 15;
+        if (values.taxAccountantClarity < 40) suspicion += 10;
+        if (docReadiness < 45) suspicion += 14;
+
+        if (suspicion >= 70) additionalDocs += 16;
+
+        let bankExplanation = values.bankConcern;
+        if (values.bankConcern >= 70) bankExplanation += 18;
+        if (suspicion >= 75) bankExplanation += 10;
+
+        return {
+          docReadiness: clamp(docReadiness),
+          suspicion: clamp(suspicion),
+          presidentAnxiety: clamp(values.presidentAnxiety),
+          taxAccountantClarity: clamp(values.taxAccountantClarity),
+          accountingKnowledge: clamp(values.accountingKnowledge),
+          bankConcern: clamp(values.bankConcern),
+          tension: clamp(tension),
+          additionalDocs: clamp(additionalDocs),
+          bankExplanation: clamp(bankExplanation)
+        };
+      }
+
+      function judge(state) {
+        const matches = [];
+        if (state.docReadiness >= 80 && state.suspicion < 40 && state.taxAccountantClarity >= 70) matches.push("指摘なし");
+        if (state.docReadiness < 50 || state.additionalDocs >= 70) matches.push("追加資料提出");
+        if (state.suspicion >= 70) matches.push("継続確認");
+        if (state.suspicion >= 80 && state.docReadiness < 40) matches.push("修正申告リスクあり");
+        if (state.bankConcern >= 70 || state.bankExplanation >= 70) matches.push("銀行説明必要");
+        if (state.accountingKnowledge < 40) matches.push("社内管理改善必要");
+
+        if (matches.length === 0) {
+          return state.additionalDocs >= 55 ? "追加資料提出" : "継続確認";
+        }
+
+        return resultPriority.find((result) => matches.includes(result)) || matches[0];
+      }
+
+      function renderMetrics(state) {
+        const container = document.getElementById("simMetrics");
+        if (!container) return;
+        container.innerHTML = "";
+        Object.entries(variableLabels).forEach(([key, label]) => {
+          const value = state[key];
+          const metric = document.createElement("div");
+          metric.className = "metric";
+          metric.innerHTML = `
+            <strong><span>${label}</span><span>${value}</span></strong>
+            <div class="meter" aria-hidden="true"><span style="width:${value}%"></span></div>
+          `;
+          container.appendChild(metric);
+        });
+      }
+
+      function renderComments(result) {
+        const container = document.getElementById("agentComments");
+        if (!container) return;
+        const labels = [
+          ["inspector", "税務調査官"],
+          ["tax", "税理士"],
+          ["president", "顧問先社長"],
+          ["accounting", "経理担当者"],
+          ["bank", "銀行"],
+          ["support", "心理的サポート役"]
+        ];
+        container.innerHTML = "";
+        labels.forEach(([key, label]) => {
+          const item = document.createElement("div");
+          item.className = "agent-comment";
+          item.innerHTML = `<strong>${label}</strong><p>${comments[result][key]}</p>`;
+          container.appendChild(item);
+        });
+      }
+
+      function renderActions(result) {
+        const list = document.getElementById("actionsList");
+        if (!list) return;
+        list.innerHTML = "";
+        actions[result].forEach((text) => {
+          const item = document.createElement("li");
+          item.textContent = text;
+          list.appendChild(item);
+        });
+      }
+
+      function updateSimulation() {
+        const state = calculateState();
+        const result = judge(state);
+
+        renderMetrics(state);
+        const label = document.getElementById("outcomeLabel");
+        const reason = document.getElementById("outcomeReason");
+        if (label) label.textContent = result;
+        if (reason) reason.textContent = reasonText[result];
+        renderComments(result);
+        renderActions(result);
+      }
+
+      document.querySelectorAll("[data-var], [data-doc]").forEach((input) => {
+        input.addEventListener("input", updateSimulation);
+        input.addEventListener("change", updateSimulation);
+      });
+
+      updateSimulation();
+    })();
+  </script>
+</body>
+</html>
